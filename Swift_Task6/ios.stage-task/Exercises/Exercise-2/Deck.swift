@@ -26,28 +26,50 @@ struct Deck: DeckBaseCompatible {
 
 extension Deck {
 
-    init(with type: DeckType) {
-        self.type = type
-    }
+	init(with type: DeckType) {
+		self.type = type
+		switch type {
+		case .deck36:
+			cards = createDeck(suits: Suit.allCases, values: Value.allCases)
+		}
+	}
 
-    public func createDeck(suits:[Suit], values:[Value]) -> [Card] {
-        []
-    }
+	public func createDeck(suits:[Suit], values:[Value]) -> [Card] {
+		var cards: [Card] = []
+		let sortedSuits = suits.sorted { $0.rawValue < $1.rawValue }
+		let sortedValues = values.sorted { $0.rawValue < $1.rawValue }
+		for suit in sortedSuits {
+			for value in sortedValues {
+				cards.append(.init(suit: suit, value: value))
+			}
+		}
+		return cards
+	}
 
-    public func shuffle() {
+	public mutating func shuffle() {
+		for i in cards.indices {
+			let j = Int.random(in: i ..< cards.count)
+			cards.swapAt(i, j)
+		}
+	}
 
-    }
+	public mutating func defineTrump() {
+		if !cards.isEmpty {
+			trump = cards.last?.suit
+			setTrumpCards(for: trump!)
+		}
+	}
 
-    public func defineTrump() {
+	public mutating func initialCardsDealForPlayers(players: [Player]) {
+		for i in players.indices {
+			players[i].hand = Array(cards.suffix(6))
+			cards.removeLast(6)
+		}
+	}
 
-    }
-
-    public func initialCardsDealForPlayers(players: [Player]) {
-
-    }
-
-    public func setTrumpCards(for suit:Suit) {
-
-    }
+	public mutating func setTrumpCards(for suit:Suit) {
+		for i in cards.indices {
+			cards[i].isTrump = cards[i].suit == suit
+		}
+	}
 }
-
