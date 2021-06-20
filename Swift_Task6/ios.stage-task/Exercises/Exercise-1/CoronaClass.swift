@@ -56,12 +56,12 @@ class CoronaClass {
 			if end == begin {
 				return 0
 			}
-			var distance = end - begin + 1
+			var _distance = end - begin + 1
 			// is not edge - distance is devided
 			if begin != 0 && end != length {
-				distance /= 2
+				_distance /= 2
 			}
-			return distance
+			return _distance
 		}
 		
 		var optimalPosition: Int {
