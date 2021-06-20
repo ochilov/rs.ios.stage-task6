@@ -23,7 +23,7 @@ extension Game {
 		for player in players {
 			guard let hand = player.hand else {continue}
 			for card in hand {
-				if card.isTrump && card.value < minTrumpCard?.value ?? .ace {
+				if card.isTrump && (minTrumpCard?.checkIfCanBeat(card: card) ?? true) {
 					minTrumpCard = card
 					firstAttackingPlayer = player
 				}

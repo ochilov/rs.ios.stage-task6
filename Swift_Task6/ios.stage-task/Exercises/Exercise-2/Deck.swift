@@ -47,10 +47,7 @@ extension Deck {
 	}
 
 	public mutating func shuffle() {
-		for i in cards.indices {
-			let j = Int.random(in: i ..< cards.count)
-			cards.swapAt(i, j)
-		}
+		cards.shuffle()
 	}
 
 	public mutating func defineTrump() {
@@ -62,7 +59,7 @@ extension Deck {
 
 	public mutating func initialCardsDealForPlayers(players: [Player]) {
 		for i in players.indices {
-			players[i].hand = Array(cards.suffix(6))
+			players[i].hand = cards.suffix(6)
 			cards.removeLast(6)
 		}
 	}

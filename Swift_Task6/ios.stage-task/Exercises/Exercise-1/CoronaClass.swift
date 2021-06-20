@@ -1,5 +1,33 @@
 import Foundation
 
+struct SeatRange {
+	let length: Int
+	var begin = 0
+	var end = 0
+	
+	var distance: Int {
+		if end == begin {
+			return 0
+		}
+		var dist = end - begin + 1
+		// is not edge - distance is devided
+		if begin != 0 && end != length {
+			dist /= 2
+		}
+		return dist
+	}
+	
+	var optimalPosition: Int {
+		if begin == 0 {
+			return 0
+		}
+		if end == length {
+			return length - 1
+		}
+		return begin + distance - 1
+	}
+}
+
 class CoronaClass {
 	var seats = [Int]()
 	let seatsLeftEdge: Int = -1
@@ -32,11 +60,11 @@ class CoronaClass {
 				bestFreeRange = freeRange
 			}
 		}
-		guard let bestFreeRange = bestFreeRange else {
+		guard let freeRange = bestFreeRange else {
 			return -1
 		}
 		
-		let position = bestFreeRange.optimalPosition
+		let position = freeRange.optimalPosition
 		seats.append(position)
 		seats.sort()
 		return position
@@ -45,33 +73,5 @@ class CoronaClass {
 	func leave(_ p: Int) {
 		guard let index = seats.firstIndex(of: p) else {return}
 		seats.remove(at: index)
-	}
-	
-	struct SeatRange {
-		let length: Int
-		var begin = 0
-		var end = 0
-		
-		var distance: Int {
-			if end == begin {
-				return 0
-			}
-			var _distance = end - begin + 1
-			// is not edge - distance is devided
-			if begin != 0 && end != length {
-				_distance /= 2
-			}
-			return _distance
-		}
-		
-		var optimalPosition: Int {
-			if begin == 0 {
-				return 0
-			}
-			if end == length {
-				return length - 1
-			}
-			return begin + distance - 1
-		}
 	}
 }
